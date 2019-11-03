@@ -1,0 +1,76 @@
+
+{% extends "layout.html"%}
+
+{% block content %}
+<div class="card card-body">
+<form action="/add_cat" method="POST" class="form-inline">
+  <div class="form-group mb-2">
+    <input class="form-control" type="text" name="nombre" placeholder="Nombre de categoria">
+  </div>
+    <button type="submit" class="btn btn-primary mb-2">
+        save
+    </button>
+</form>
+</div>
+
+{% with messages= get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  <p>{{message}}</p>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Codigo</td>
+            <th scope="col">Categoria</td>
+            <th scope="col">Operaciones</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ca in cat %}
+        <tr>
+            <td>{{ ca.0 }}</td>
+            <td>{{ ca.1 }}</td>
+            <td>
+                <a class="btn btn-primary" href="/edit_categoria/{{ ca.0 }}" data-toggle="modal" data-target="#{{ ca.1 }}" role="button">Editar</a>
+                <div class="modal fade" id="{{ ca.1 }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">{{ ca.1 }}</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                            <form action="/actualizar_categoria/{{ca.0}}" method="POST">
+                                    <label for="exampleInputEmail1">Codigo</label>
+                                    <input class="form-control" type="text" placeholder="{{ca.0}}" readonly >
+                                    <label for="exampleInputEmail1">Categoria</label>
+                                    <input class="form-control" name="nombre2" type="text" placeholder="{{ca.1}}">
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                              <button type="submit" class="btn btn-primary" >Guardar Cambios</button>
+                            </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                <a class="btn btn-danger" href="/delete_categoria/{{ ca.0 }}" role="button">Eliminar</a>
+            </td>
+        </tr>
+         <!-- Modal -->
+      
+        {% endfor %}
+      
+    </tbody>
+</table>
+{% endblock %}
